@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: privacy-guard-staged
+        name: Privacy Guard - staged files
+        entry: python3 tools/privacy_guard.py --staged --fail-on medium
+        language: system
+        pass_filenames: false
+
+      - id: gitleaks-local
+        name: Gitleaks - repository secret scan
+        entry: gitleaks detect --source . --redact
+        language: system
+        pass_filenames: false

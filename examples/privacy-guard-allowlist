@@ -1,0 +1,5 @@
+# Regex allowlist for known-safe false positives.
+# Keep this file small. Do not allowlist real secrets.
+# Examples:
+# medium:email:.*:<EMAIL_REDACTED>
+# high_entropy_token:docs/example

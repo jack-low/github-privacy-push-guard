@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '\n[privacy-guard] scanning tracked files before push...\n'
+python3 tools/privacy_guard.py --all-files --fail-on medium
+
+if command -v gitleaks >/dev/null 2>&1; then
+  printf '\n[gitleaks] scanning repository...\n'
+  gitleaks detect --source . --redact
+else
+  printf '\n[gitleaks] not found. Install gitleaks or remove this bypass only for private local testing.\n' >&2
+  exit 2
+fi
+
+if command -v trufflehog >/dev/null 2>&1; then
+  printf '\n[trufflehog] scanning filesystem for verified secrets...\n'
+  trufflehog filesystem . --only-verified
+else
+  printf '\n[trufflehog] not found. Continuing after privacy_guard + gitleaks. Install trufflehog for stronger verification.\n' >&2
+fi
+
+printf '\n[privacy-guard] OK to push.\n'
