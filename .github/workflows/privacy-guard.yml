@@ -34,4 +34,4 @@ jobs:
           sudo install -m 0755 trufflehog /usr/local/bin/trufflehog
 
       - name: Run TruffleHog verified scan
-        run: trufflehog filesystem ./ --only-verified
+        run: trufflehog filesystem ./ --only-verified --no-update
