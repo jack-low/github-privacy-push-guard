@@ -25,10 +25,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install TruffleHog
+        env:
+          TRUFFLEHOG_VERSION: 3.90.5
+        run: |
+          curl -sSfL "https://github.com/trufflesecurity/trufflehog/releases/download/v${TRUFFLEHOG_VERSION}/trufflehog_${TRUFFLEHOG_VERSION}_linux_amd64.tar.gz" -o trufflehog.tar.gz
+          tar -xzf trufflehog.tar.gz trufflehog
+          sudo install -m 0755 trufflehog /usr/local/bin/trufflehog
+
       - name: Run TruffleHog verified scan
-        uses: trufflesecurity/trufflehog@v3.90.5
-        with:
-          path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
-          extra_args: --only-verified
+        run: trufflehog filesystem ./ --only-verified
